@@ -1,5 +1,5 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
-import { streamText } from "ai";
+import { smoothStream, streamText } from "ai";
 import { Agent, fetch as undiciFetch } from "undici";
 
 // Allow streaming responses up to 30 seconds
@@ -18,10 +18,11 @@ export async function POST(req: Request) {
   const streamArgs = {
     model: openAiCompatibleModel,
     messages,
-    frequencyPenalty: 1,
-    maxTokens: 1024,
+    frequency_penalty: 1,
+    max_tokens: 1024,
     temperature: 0.9,
-    topP: 0.9,
+    top_p: 0.9,
+    experimental_transform: [smoothStream()],
   };
 
   const result = streamText(streamArgs);
